@@ -69,7 +69,18 @@ def listen_print_loop(responses, stream, language):
 
     return final            
 
-targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]
+
+languages = {
+    "ar-SA" : "arabic",
+    "en-US" : "english",
+    "fr-FR" : "french",
+    "es-ES" : "spanish",
+}
+targets = list(languages.keys())
+
+print(languages)
+print(targets)
+
 
 def record_conference(conf_name, source="en-US"):
     
@@ -115,43 +126,46 @@ def record_conference(conf_name, source="en-US"):
 
             responses = client.streaming_recognize(streaming_config, requests, timeout=72000000)
 
+            texts = {
+                "english":"", 
+                "french":"", 
+                "spanish":"", 
+                "arabic":""
+            }
+
             transcription = listen_print_loop(responses, stream, source)
             
-            #write transcription
-            if source != "ar-SA":
-                ftrans = open(f"./conference_{conf_name}/transcription.txt", "a+")
-                ftrans.write("{}".format(transcription))
-                ftrans.close()
-                
-                ftrans = open(f"./conference_{conf_name}/recent.txt", "w+")
-                ftrans.write("{}".format(transcription))
-                ftrans.close()
-            else:
-                ftrans = open(f"./conference_{conf_name}/transcription.txt", "ab+")
-                transcription = transcription.encode("utf-8")
-                ftrans.write(transcription)
-                ftrans.close()
-                
-                ftrans = open(f"./conference_{conf_name}/recent.txt", "wb+")
-                transcription = transcription.encode("utf-8")
-                ftrans.write(transcription)
-                ftrans.close()
-            
-            #do and write translation
+            texts[languages.get(source)] = transcription
             for target in targets:
                 if(target != source):
                     if(transcription != ""):
                         translation = translate_text(transcription, source=source, target=target)
                     else:
                         translation = transcription
-                        
-                    ftrad = open(f"./conference_{conf_name}/translated_{target}.txt", "a", encoding="utf-8")
-                    ftrad.write(" " + translation)
-                    ftrad.close()
-                    
-                    ftrad = open(f"./conference_{conf_name}/recent_translated_{target}.txt", "w", encoding="utf-8")
-                    ftrad.write(translation)
-                    ftrad.close()
-                
+                    texts[languages.get(target)] = translation
+
+            data = texts.copy()
+            data["idConference"] = conf_name
+            print(data)
+            #x = requests.post(url, data = data)
+            #print(x)
+
+            for key, value in texts.items():
+                if source == "ar-SA":
+                    f = open(f"./conference_{conf_name}/{key}_full.txt", "ab+", encoding="utf-8")
+                    f.write("{}".format(value))
+                    f.close()
+
+                    f2 = open(f"./conference_{conf_name}/{key}_recent.txt", "wb+", encoding="utf-8")
+                    f2.write("{}".format(value))
+                    f2.close()
+                else:
+                    f = open(f"./conference_{conf_name}/{key}_full.txt", "a+", encoding="utf-8")
+                    f.write("{}".format(value))
+                    f.close()
+
+                    f2 = open(f"./conference_{conf_name}/{key}_recent.txt", "w+", encoding="utf-8")
+                    f2.write("{}".format(value))
+                    f2.close()
 
 record_conference("A2", source="fr-FR")

@@ -24,4 +24,4 @@ def translate_text(text, source="en-US", target="fr-FR", project_id="speechtotex
         fhand.write(" " + translation.translated_text)
     fhand.close()"""
     
-translate_text("Hello there", source="en-US", target="ar-SA")
+print(translate_text("Hello there", source="en-US", target="ar-SA"))
