@@ -1,0 +1,8 @@
+wheel
+setuptools
+wordcloud
+nltk
+sklearn
+google-cloud-translate==2.0.1
+google-cloud-speech
+PyAudio
