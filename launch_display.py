@@ -1,5 +1,6 @@
 import importlib
 import time
+import base64
 
 wikifier = importlib.import_module('display.wikifier')
 wc = importlib.import_module('display.wc')
@@ -78,6 +79,7 @@ def generate_conference_clouds(conf_id):
         try:      
             f = open(f"./conference_{conf_id}/{languages.get(target)}_full.txt", "r", encoding="utf-8")
             full = f.read() 
+
             f.close() 
         except FileNotFoundError:
             full = ""
@@ -95,17 +97,17 @@ def generate_conference_clouds(conf_id):
             f.close() 
         except FileNotFoundError:
             corpus = ""
-        
-        if(corpus != ""):
-            cloud = generate_cloud_semantic(full, corpus=corpus, recent=recent, language=target)
-        else:
-            cloud = generate_cloud_basic(full, corpus=corpus, recent=recent, language=target)
-        
+
         if(full != ""):
-            cloud.savefig(f"./conference_{conf_id}/cloud_{languages.get(target)}.png")
-            print(f"Generated cloud {languages.get(target)}")
+            if(corpus != ""):
+                cloud = generate_cloud_semantic(full, corpus=corpus, recent=recent, language=target)
+            else:
+                cloud = generate_cloud_basic(full, corpus=corpus, recent=recent, language=target)            
+                cloud.savefig(f"./conference_{conf_id}/cloud_{languages.get(target)}.png")
+                print(f"Generated cloud {languages.get(target)}")
 
     time.sleep(10)
-    generate_conference_clouds("A1")
+    generate_conference_clouds("1")
 
-generate_conference_clouds("A1")
+print("Début conf")
+generate_conference_clouds("1")
