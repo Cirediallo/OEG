@@ -84,7 +84,7 @@ print(targets)
 
 def record_conference(conf_id, conf_name, conf_room, source="en-US"):
     
-    path = f'conference_{conf_name}'
+    path = f'conference_{conf_id}'
     if (os.path.exists(path) == False):
         os.mkdir(path)
     
@@ -119,12 +119,12 @@ def record_conference(conf_id, conf_name, conf_room, source="en-US"):
             stream.audio_input = []
             audio_generator = stream.generator()
 
-            requests = (
+            req = (
                 speech.StreamingRecognizeRequest(audio_content=content)
                 for content in audio_generator
             )
 
-            responses = client.streaming_recognize(streaming_config, requests, timeout=72000000)
+            responses = client.streaming_recognize(streaming_config, req, timeout=72000000)
 
             texts = {
                 "english":"", 
@@ -145,31 +145,33 @@ def record_conference(conf_id, conf_name, conf_room, source="en-US"):
                     texts[languages.get(target)] = translation
 
             data = dict()
-            data["conf_id"] = conf_id
+            data["conf_id"] = int(conf_id)
             data["conf_name"] = conf_name
             data["conf_room"] = conf_room
             data["conf_lang"] = languages.get(source)
             data["sentences"] = texts.copy()
-            
-            x = requests.put("https://multiling-oeg.univ-nantes.fr/insertion", data = data)
+
+            json_object = json.dumps(data, indent = 4, ensure_ascii=False).encode('utf8')
+            print(json_object.decode())
+            x = requests.put("https://multiling-oeg.univ-nantes.fr/insertion", data = json_object)
             print(x)
 
             for key, value in texts.items():
                 if source == "ar-SA":
-                    f = open(f"./conference_{conf_name}/{key}_full.txt", "ab+", encoding="utf-8")
+                    f = open(f"./conference_{conf_id}/{key}_full.txt", "ab+", encoding="utf-8")
                     f.write("{}".format(value))
                     f.close()
 
-                    f2 = open(f"./conference_{conf_name}/{key}_recent.txt", "wb+", encoding="utf-8")
+                    f2 = open(f"./conference_{conf_id}/{key}_recent.txt", "wb+", encoding="utf-8")
                     f2.write("{}".format(value))
                     f2.close()
                 else:
-                    f = open(f"./conference_{conf_name}/{key}_full.txt", "a+", encoding="utf-8")
+                    f = open(f"./conference_{conf_id}/{key}_full.txt", "a+", encoding="utf-8")
                     f.write("{}".format(value))
                     f.close()
 
-                    f2 = open(f"./conference_{conf_name}/{key}_recent.txt", "w+", encoding="utf-8")
+                    f2 = open(f"./conference_{conf_id}/{key}_recent.txt", "w+", encoding="utf-8")
                     f2.write("{}".format(value))
                     f2.close()
 
-record_conference("A1", "Conf A1", "Salle 1", source="fr-FR")
+record_conference("1", "Conf A1", "Salle 1", source="fr-FR")
