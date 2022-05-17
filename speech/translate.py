@@ -18,10 +18,3 @@ def translate_text(text, source="en-US", target="fr-FR", project_id="speechtotex
     )
     
     return response.translations[0].translated_text
-    """print(response.translations[0].translated_text)
-    fhand = open(f"translated_{target}.txt", "a", encoding="utf-8")
-    for translation in response.translations:
-        fhand.write(" " + translation.translated_text)
-    fhand.close()"""
-    
-print(translate_text("Hello there", source="en-US", target="ar-SA"))

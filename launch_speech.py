@@ -82,7 +82,7 @@ print(languages)
 print(targets)
 
 
-def record_conference(conf_name, source="en-US"):
+def record_conference(conf_id, conf_name, conf_room, source="en-US"):
     
     path = f'conference_{conf_name}'
     if (os.path.exists(path) == False):
@@ -144,11 +144,15 @@ def record_conference(conf_name, source="en-US"):
                         translation = transcription
                     texts[languages.get(target)] = translation
 
-            data = texts.copy()
-            data["idConference"] = conf_name
-            print(data)
-            #x = requests.post(url, data = data)
-            #print(x)
+            data = dict()
+            data["conf_id"] = conf_id
+            data["conf_name"] = conf_name
+            data["conf_room"] = conf_room
+            data["conf_lang"] = languages.get(source)
+            data["sentences"] = texts.copy()
+            
+            x = requests.put("https://multiling-oeg.univ-nantes.fr/insertion", data = data)
+            print(x)
 
             for key, value in texts.items():
                 if source == "ar-SA":
@@ -168,4 +172,4 @@ def record_conference(conf_name, source="en-US"):
                     f2.write("{}".format(value))
                     f2.close()
 
-record_conference("A2", source="fr-FR")
+record_conference("A1", "Conf A1", "Salle 1", source="fr-FR")
