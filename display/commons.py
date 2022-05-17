@@ -4,6 +4,7 @@ from nltk.probability import FreqDist
 import re
 import math
 
+nltk.download('omw-1.4')
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
