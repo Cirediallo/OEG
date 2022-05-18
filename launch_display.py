@@ -27,6 +27,12 @@ semantic_spanish = None
 semantic_arabic = None
 semantic_english = None
 
+
+semantic_corpus_french = None
+semantic_corpus_spanish = None
+semantic_corpus_arabic = None
+semantic_corpus_english = None
+
 PATH_FOLDER = './conferences'
 
 class SemanticWrapper:
@@ -74,32 +80,63 @@ def wcs_save(wcs, conf_id, language, layout="radial"):
     plt.savefig(f"{path}/cloud_{languages.get(language)}.png")
     plt.close(fig)
 
+def add_dict(dict_1, dict_2):
+    for key, values in dict_2.items():
+        if key in dict_1:
+            if isinstance(dict_1[key], list):
+                for value in values:
+                    if(value not in list(dict_1.values())[0]):
+                        dict_1[key].append(value)
+        else:
+            dict_1[key] = value
+    return dict_1
+
 def generate_cloud_semantic(text, conf_id, corpus=None, recent=None, language="en-US"):
     global semantic_french
     global semantic_spanish
     global semantic_arabic
     global semantic_english
 
+    global splits_arabic
+    global splits_english
+    global splits_french
+    global splits_spanish
+
     if(language == "en-US" and semantic_english==None):
         semantic_english = SemanticWrapper(corpus, language)
+        splits_english = get_semantics(text, semantic_english.getRelatedFields(), semantic_english.getRelatedDocuments(), language=language) 
     if(language == "fr-FR" and semantic_french==None):
         semantic_french = SemanticWrapper(corpus, language)
+        splits_french = get_semantics(text, semantic_french.getRelatedFields(), semantic_french.getRelatedDocuments(), language=language) 
     if(language == "es-ES" and semantic_spanish==None):
         semantic_spanish = SemanticWrapper(corpus, language)
+        splits_spanish = get_semantics(text, semantic_spanish.getRelatedFields(), semantic_spanish.getRelatedDocuments(), language=language) 
     if(language == "ar-SA" and semantic_arabic==None):
         semantic_arabic = SemanticWrapper(corpus, language)
+        splits_arabic = get_semantics(text, semantic_arabic.getRelatedFields(), semantic_arabic.getRelatedDocuments(), language=language) 
 
     if(language == "en-US"):
         semantic = semantic_english
+        split_recent =  get_semantics(recent, semantic.getRelatedFields(), semantic.getRelatedDocuments(), language=language)
+        splits_english = add_dict(splits_english, split_recent) 
+        splits =  splits_english  
     if(language == "fr-FR"):
         semantic = semantic_french
+        split_recent =  get_semantics(recent, semantic.getRelatedFields(), semantic.getRelatedDocuments(), language=language)
+        splits_french = add_dict(splits_french, split_recent) 
+        splits =  splits_french   
     if(language == "es-ES"):
         semantic = semantic_spanish
+        split_recent =  get_semantics(recent, semantic.getRelatedFields(), semantic.getRelatedDocuments(), language=language)
+        splits_spanish = add_dict(splits_spanish, split_recent) 
+        splits =  splits_spanish 
     if(language == "ar-SA"):
         semantic = semantic_arabic
-
-    text_split_semantics = get_semantics(text, semantic.getRelatedFields(), semantic.getRelatedDocuments(), language=language)    
-    wcs = generate_wcs_semantics(text_split_semantics, corpus=semantic.getCorpus(), recent=recent, semantic_fields=semantic.getSemanticFields(), language=language)
+        split_recent =  get_semantics(recent, semantic.getRelatedFields(), semantic.getRelatedDocuments(), language=language)
+        splits_arabic = add_dict(splits_arabic, split_recent) 
+        splits =  splits_arabic
+    
+    wcs = generate_wcs_semantics(splits, corpus=semantic.getCorpus(), recent=recent, semantic_fields=semantic.getSemanticFields(), language=language)
     wcs_save(wcs, conf_id, language, layout="radial")
 
 def read_files(conf_id, target):
@@ -121,7 +158,7 @@ def read_files(conf_id, target):
         recent = ""
 
     try:
-        f = open(f"{path}/{conf_id}/corpus_{languages.get(target)}.txt", "r")
+        f = open(f"{path}/corpus_{languages.get(target)}.txt", "r")
         corpus = f.read() 
         f.close() 
     except FileNotFoundError:
@@ -158,11 +195,11 @@ def end_conference(conf_id):
     for lang_target in lang_targets:
         full, recent, corpus = read_files(conf_id, lang_target)
         if(full != ""):
-                if(corpus != ""):
-                    generate_cloud_semantic(full, conf_id, corpus=corpus, recent=full, language=lang_target)
-                else:
-                    generate_cloud_basic(full, conf_id, corpus=corpus, recent=full, language=lang_target)            
-                print(f"Generated cloud {languages.get(lang_target)}")
+            if(corpus != ""):
+                generate_cloud_basic(full, conf_id, corpus=corpus, recent=full, language=lang_target)
+            else:
+                generate_cloud_basic(full, conf_id, corpus=corpus, recent=full, language=lang_target)            
+            print(f"Generated cloud {languages.get(lang_target)}")
         
     post_wordcloud(conf_id)
 
@@ -171,9 +208,10 @@ def generate_conference_clouds(conf_id):
     for lang_target in lang_targets:
         full, recent, corpus = read_files(conf_id, lang_target)
 
-        if(full != ""):
+        if(full != "" or corpus != ""):
             if(corpus != ""):
-                generate_cloud_semantic(full, conf_id, corpus=corpus, recent=recent, language=lang_target)
+                #generate_cloud_semantic(full, conf_id, corpus=corpus, recent=recent, language=lang_target)
+                generate_cloud_basic(full, conf_id, corpus=corpus, recent=recent, language=lang_target)   
             else:
                 generate_cloud_basic(full, conf_id, corpus=corpus, recent=recent, language=lang_target)            
             print(f"Generated cloud {languages.get(lang_target)}")

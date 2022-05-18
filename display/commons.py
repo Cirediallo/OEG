@@ -37,11 +37,14 @@ def get_freqDist(text, corpus=None, language="en-US"):
 
 def ponderate_freqDist(freqs, corpus):
   corpusFreqs = get_freqDist(corpus)
-  D = 1 + len(corpusFreqs)
+  D = 1 + 1
   freqDist = FreqDist()
+
   for word in freqs:
-    tf = 0.4+0.6*(freqs.freq(word)/freqs.freq(freqs.max()));#Normalized to max
+    tf = 0.5+0.5*(freqs.freq(word)/freqs.freq(freqs.max()))#Normalized to max
     df = 1 + int(corpusFreqs.freq(word)>0)
     idf = math.log(D/df)
-    freqDist[word] = tf*idf + 0.000001
+    if(idf == 0):
+      idf = 0.2 #For corpus word to still show
+    freqDist[word] = tf*idf
   return freqDist
