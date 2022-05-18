@@ -79,6 +79,12 @@ languages = {
 }
 lang_targets = list(languages.keys())
 
+def put_sentence(data):
+    json_object = json.dumps(data, indent = 4, ensure_ascii=False).encode('utf8')
+    print(json_object.decode())
+    x = requests.put("https://multiling-oeg.univ-nantes.fr/insertion", data = json_object)
+    print(x)
+
 def record_conference(conf_id, conf_name, conf_room, conf_lang):
     
     path = f'conference_{conf_id}'
@@ -127,6 +133,7 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
                 "french":"", 
                 "spanish":"", 
                 "arabic":""
+            }
             
             transcription = listen_print_loop(responses, stream)
             
@@ -146,10 +153,7 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
             data["conf_lang"] = conf_lang
             data["sentences"] = texts.copy()
 
-            json_object = json.dumps(data, indent = 4, ensure_ascii=False).encode('utf8')
-            print(json_object.decode())
-            x = requests.put("https://multiling-oeg.univ-nantes.fr/insertion", data = json_object)
-            print(x)
+            put_sentence(data)
 
             for key, value in texts.items():
                 if conf_lang == "arabic":
