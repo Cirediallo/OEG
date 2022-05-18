@@ -4,6 +4,7 @@ import base64
 import matplotlib.pyplot as plt
 import resource
 import gc
+import requests
 
 wikifier = importlib.import_module('display.wikifier')
 wc = importlib.import_module('display.wc')
@@ -118,6 +119,22 @@ def read_files(conf_id, target):
 
     return full, recent, corpus
 
+def post_wordcloud(conf_id):
+    languages = ["french", "spanish", "arabic", "english"]
+    images = {
+        "english":"", 
+        "french":"", 
+        "spanish":"", 
+        "arabic":""
+    }
+    for language in languages:
+        f = open(f'./conference_{conf_id}/cloud_{language}.png', 'rb')
+        encoded = base64.b64encode(f.read())
+        f.close()
+        images[language] = encoded
+    r = requests.post("https://multiling-oeg.univ-nantes.fr/updateWordCloud", data = images)
+    print(r)
+
 def end_conference(conf_id): 
     lang_targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]   
     for lang_target in lang_targets:
@@ -128,6 +145,8 @@ def end_conference(conf_id):
                 else:
                     generate_cloud_basic(full, conf_id, corpus=corpus, recent=full, language=lang_target)            
                 print(f"Generated cloud {languages.get(lang_target)}")
+        
+    post_wordcloud(conf_id)
 
 def generate_conference_clouds(conf_id):    
     lang_targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]   
@@ -140,6 +159,8 @@ def generate_conference_clouds(conf_id):
             else:
                 generate_cloud_basic(full, conf_id, corpus=corpus, recent=recent, language=lang_target)            
             print(f"Generated cloud {languages.get(lang_target)}")
+
+    post_wordcloud(conf_id)
 
     gc.collect()
     print(f"Memory used : {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}")
