@@ -24,8 +24,7 @@ RED = "\033[0;31m"
 GREEN = "\033[0;32m"
 YELLOW = "\033[0;33m"
 
-
-def listen_print_loop(responses, stream, language):
+def listen_print_loop(responses, stream):
     final = ""
     for response in responses:
         sentence = ""
@@ -72,20 +71,15 @@ def listen_print_loop(responses, stream, language):
 
     return final            
 
-
 languages = {
-    "ar-SA" : "arabic",
-    "en-US" : "english",
-    "fr-FR" : "french",
-    "es-ES" : "spanish",
+    "arabic" : "ar-SA",
+    "english" : "en-US",
+    "french" : "fr-FR",
+    "spanish" : "es-ES",
 }
-targets = list(languages.keys())
+lang_targets = list(languages.keys())
 
-print(languages)
-print(targets)
-
-
-def record_conference(conf_id, conf_name, conf_room, source="en-US"):
+def record_conference(conf_id, conf_name, conf_room, conf_lang):
     
     path = f'conference_{conf_id}'
     if (os.path.exists(path) == False):
@@ -96,8 +90,7 @@ def record_conference(conf_id, conf_name, conf_room, source="en-US"):
     config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=SAMPLE_RATE,
-        language_code=source,
-        
+        language_code=languages.get(conf_lang),
         max_alternatives=1,
     )
 
@@ -134,24 +127,23 @@ def record_conference(conf_id, conf_name, conf_room, source="en-US"):
                 "french":"", 
                 "spanish":"", 
                 "arabic":""
-            }
-
-            transcription = listen_print_loop(responses, stream, source)
             
-            texts[languages.get(source)] = transcription
-            for target in targets:
-                if(target != source):
+            transcription = listen_print_loop(responses, stream)
+            
+            texts[conf_lang] = transcription
+            for lang_target in lang_targets:
+                if(lang_target != conf_lang):
                     if(transcription != ""):
-                        translation = translate_text(transcription, source=source, target=target)
+                        translation = translate_text(transcription, languages.get(conf_lang), languages.get(lang_target))
                     else:
                         translation = transcription
-                    texts[languages.get(target)] = translation
+                    texts[lang_target] = translation
 
             data = dict()
             data["conf_id"] = int(conf_id)
             data["conf_name"] = conf_name
             data["conf_room"] = conf_room
-            data["conf_lang"] = languages.get(source)
+            data["conf_lang"] = conf_lang
             data["sentences"] = texts.copy()
 
             json_object = json.dumps(data, indent = 4, ensure_ascii=False).encode('utf8')
@@ -160,7 +152,7 @@ def record_conference(conf_id, conf_name, conf_room, source="en-US"):
             print(x)
 
             for key, value in texts.items():
-                if source == "ar-SA":
+                if conf_lang == "arabic":
                     f = open(f"./conference_{conf_id}/{key}_full.txt", "ab+", encoding="utf-8")
                     f.write("{}".format(value))
                     f.close()
@@ -179,4 +171,14 @@ def record_conference(conf_id, conf_name, conf_room, source="en-US"):
 
             print(f"Memory used : {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}")
 
-record_conference("1", "Conf A1", "Salle 1", source="fr-FR")
+conf_id = ""
+while(conf_id.isdigit() == False):
+    conf_id = input("Conference id (integer): ")
+conf_title = input("Conference title: ")
+conf_lang=""
+while(conf_lang not in lang_targets):
+    conf_lang = input("Conference language (arabic|english|french|spanish): ")
+
+print("Starting transcription")
+
+record_conference(conf_id, conf_title, "405", conf_lang)

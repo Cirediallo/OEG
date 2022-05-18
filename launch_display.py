@@ -94,36 +94,52 @@ def generate_cloud_semantic(text, conf_id, corpus=None, recent=None, language="e
     wcs = generate_wcs_semantics(text_split_semantics, corpus=semantic.getCorpus(), recent=recent, semantic_fields=semantic.getSemanticFields(), language=language)
     wcs_save(wcs, conf_id, language, layout="radial")
 
+def read_files(conf_id, target):
+    try:      
+        f = open(f"./conference_{conf_id}/{languages.get(target)}_full.txt", "r", encoding="utf-8")
+        full = f.read() 
+        f.close() 
+    except FileNotFoundError:
+        full = ""
+
+    try: 
+        f2 = open(f"./conference_{conf_id}/{languages.get(target)}_recent.txt", "r", encoding="utf-8")
+        recent = f2.read() 
+        f2.close() 
+    except FileNotFoundError:
+        recent = ""
+
+    try:
+        f = open(f"./conference_{conf_id}/corpus_{languages.get(target)}.txt", "r")
+        corpus = f.read() 
+        f.close() 
+    except FileNotFoundError:
+        corpus = ""
+
+    return full, recent, corpus
+
+def end_conference(conf_id): 
+    lang_targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]   
+    for lang_target in lang_targets:
+        full, recent, corpus = read_files(conf_id, lang_target)
+        if(full != ""):
+                if(corpus != ""):
+                    generate_cloud_semantic(full, conf_id, corpus=corpus, recent=full, language=lang_target)
+                else:
+                    generate_cloud_basic(full, conf_id, corpus=corpus, recent=full, language=lang_target)            
+                print(f"Generated cloud {languages.get(lang_target)}")
+
 def generate_conference_clouds(conf_id):    
-    targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]   
-    for target in targets:
-        try:      
-            f = open(f"./conference_{conf_id}/{languages.get(target)}_full.txt", "r", encoding="utf-8")
-            full = f.read() 
-            f.close() 
-        except FileNotFoundError:
-            full = ""
-
-        try: 
-            f2 = open(f"./conference_{conf_id}/{languages.get(target)}_recent.txt", "r", encoding="utf-8")
-            recent = f2.read() 
-            f2.close() 
-        except FileNotFoundError:
-            recent = ""
-
-        try:
-            f = open(f"./conference_{conf_id}/corpus_{languages.get(target)}.txt", "r")
-            corpus = f.read() 
-            f.close() 
-        except FileNotFoundError:
-            corpus = ""
+    lang_targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]   
+    for lang_target in lang_targets:
+        full, recent, corpus = read_files(conf_id, lang_target)
 
         if(full != ""):
             if(corpus != ""):
-                generate_cloud_semantic(full, conf_id, corpus=corpus, recent=recent, language=target)
+                generate_cloud_semantic(full, conf_id, corpus=corpus, recent=recent, language=lang_target)
             else:
-                generate_cloud_basic(full, conf_id, corpus=corpus, recent=recent, language=target)            
-            print(f"Generated cloud {languages.get(target)}")
+                generate_cloud_basic(full, conf_id, corpus=corpus, recent=recent, language=lang_target)            
+            print(f"Generated cloud {languages.get(lang_target)}")
 
     gc.collect()
     print(f"Memory used : {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}")
@@ -131,8 +147,8 @@ def generate_conference_clouds(conf_id):
     time.sleep(10)
     generate_conference_clouds(conf_id)
 
-
-conf_id = input("Please enter conference id: ")
-print("Conference identifier:", conf_id)
+conf_id=""
+while(conf_id.isdigit() == False):
+    conf_id = input("Conference id: ")
 print("Starting generation")
 generate_conference_clouds(conf_id)

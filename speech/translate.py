@@ -1,7 +1,7 @@
 import os
 from google.cloud import translate
 
-def translate_text(text, source="en-US", target="fr-FR", project_id="speechtotextapi-340414"):
+def translate_text(text, lang_source, lang_target, project_id="speechtotextapi-340414"):
 
     client = translate.TranslationServiceClient()
 
@@ -13,8 +13,8 @@ def translate_text(text, source="en-US", target="fr-FR", project_id="speechtotex
         parent= parent,
         contents= [text],
         mime_type= "text/plain",  # mime types: text/plain, text/html
-        source_language_code= source,
-        target_language_code= target,
+        source_language_code= lang_source,
+        target_language_code= lang_target,
     )
     
     return response.translations[0].translated_text
