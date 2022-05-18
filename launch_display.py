@@ -2,6 +2,8 @@ import importlib
 import time
 import base64
 import matplotlib.pyplot as plt
+import resource
+import gc
 
 wikifier = importlib.import_module('display.wikifier')
 wc = importlib.import_module('display.wc')
@@ -40,20 +42,11 @@ class SemanticWrapper:
     def getSemanticFields(self):
         return self.semantic_fields
 
-def wc_plot(wc, conf_id, language):
-    fig = plt.figure()
-    fig.set_size_inches(18, 15)
-    plt.imshow(wc, interpolation="bilinear")
-    plt.axis("off")
-    plt.savefig(f"./conference_{conf_id}/cloud_{languages.get(language)}.png")
-    plt.close(fig)
-
 def generate_cloud_basic(text, conf_id, corpus=None, recent=None, language="en-US"):
     wc = generate_wc(text, corpus=corpus, recent=recent, language=language)
-    return wc_plot(wc, conf_id, language)
-    
+    wc.to_file(f"./conference_{conf_id}/cloud_{languages.get(language)}.png")
 
-def wcs_plot(wcs, conf_id, language, layout="radial"):
+def wcs_save(wcs, conf_id, language, layout="radial"):
     fig = plt.figure()
     fig.set_size_inches(18, 15)
     
@@ -99,7 +92,7 @@ def generate_cloud_semantic(text, conf_id, corpus=None, recent=None, language="e
 
     text_split_semantics = get_semantics(text, semantic.getRelatedFields(), semantic.getRelatedDocuments(), language=language)    
     wcs = generate_wcs_semantics(text_split_semantics, corpus=semantic.getCorpus(), recent=recent, semantic_fields=semantic.getSemanticFields(), language=language)
-    return wcs_plot(wcs, conf_id, language, layout="radial")
+    wcs_save(wcs, conf_id, language, layout="radial")
 
 def generate_conference_clouds(conf_id):    
     targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]   
@@ -107,7 +100,6 @@ def generate_conference_clouds(conf_id):
         try:      
             f = open(f"./conference_{conf_id}/{languages.get(target)}_full.txt", "r", encoding="utf-8")
             full = f.read() 
-
             f.close() 
         except FileNotFoundError:
             full = ""
@@ -128,13 +120,19 @@ def generate_conference_clouds(conf_id):
 
         if(full != ""):
             if(corpus != ""):
-                cloud = generate_cloud_semantic(full, conf_id, corpus=corpus, recent=recent, language=target)
+                generate_cloud_semantic(full, conf_id, corpus=corpus, recent=recent, language=target)
             else:
-                cloud = generate_cloud_basic(full, conf_id, corpus=corpus, recent=recent, language=target)            
+                generate_cloud_basic(full, conf_id, corpus=corpus, recent=recent, language=target)            
             print(f"Generated cloud {languages.get(target)}")
 
-    time.sleep(10)
-    generate_conference_clouds("1")
+    gc.collect()
+    print(f"Memory used : {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}")
 
-print("Début conf")
-generate_conference_clouds("1")
+    time.sleep(10)
+    generate_conference_clouds(conf_id)
+
+
+conf_id = input("Please enter conference id: ")
+print("Conference identifier:", conf_id)
+print("Starting generation")
+generate_conference_clouds(conf_id)

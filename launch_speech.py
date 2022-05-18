@@ -7,6 +7,9 @@ from google.cloud import speech
 import requests
 import json
 
+import resource
+import gc
+
 credential_path = "./speech/speechtotextapi.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
 
@@ -173,5 +176,7 @@ def record_conference(conf_id, conf_name, conf_room, source="en-US"):
                     f2 = open(f"./conference_{conf_id}/{key}_recent.txt", "w+", encoding="utf-8")
                     f2.write("{}".format(value))
                     f2.close()
+
+            print(f"Memory used : {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}")
 
 record_conference("1", "Conf A1", "Salle 1", source="fr-FR")
