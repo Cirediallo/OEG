@@ -6,10 +6,7 @@ from wordcloud import WordCloud
 commons = importlib.import_module('display.commons')
 tokenize_text =  getattr(commons, "tokenize_text")
 get_freqDist =  getattr(commons, "get_freqDist")
-stop_words_en =  getattr(commons, "stop_words_en")
-stop_words_fr =  getattr(commons, "stop_words_fr")
-stop_words_ar =  getattr(commons, "stop_words_ar")
-stop_words_es =  getattr(commons, "stop_words_es")
+stop_words =  getattr(commons, "stop_words")
 
 class SimpleGroupedColorFunc(object):
     def __init__(self, color_to_words, default_color):
@@ -40,19 +37,13 @@ def generate_wcs_semantics(splits, corpus, recent, semantic_fields, language="en
     x, y = np.ogrid[:900, :900]
     mask = (x - 450) ** 2 + (y - 450) ** 2 > 450 ** 2
     mask = 255 * mask.astype(int)
-  
-    font_path="./display/fonts/NotoSans-Regular.ttf"
-    if(language == "en-US"):
-      stop_words = stop_words_en
-    elif(language == "fr-FR"):
-        stop_words = stop_words_fr 
-    elif(language == "es-ES"):
-        stop_words = stop_words_es 
-    elif(language == "ar-SA"):
+    
+    if(language == "ar-SA"):
         font_path ='./display/fonts/NotoNaskhArabic-Regular.ttf'
-        stop_words = stop_words_ar
+    else:
+        font_path="./display/fonts/NotoSans-Regular.ttf"
 
-    nb_bins = []
+    nb_bins = []#Order wc by size
     
     for key in splits:
       if(splits[key] != None):
@@ -77,31 +68,10 @@ def generate_wcs_semantics(splits, corpus, recent, semantic_fields, language="en
     wcs = [element for _, element in sorted_zipped_lists]
     return wcs
 
-def wcs_plot(wcs, layout="radial"):
-    fig = plt.figure()
-    fig.set_size_inches(18, 15)
-    
-    coords = []
-    if(layout == "radial"):
-        gs = fig.add_gridspec(4, 4)
-        coords= [gs[1:-1, 1:-1], gs[1, 0], gs[2, 3], gs[0, 1], gs[3, 2]]
-    if(layout == "columns"):
-        gs = fig.add_gridspec(3, 3)
-        coords= [gs[0,0], gs[0, 1], gs[0, 2], gs[1, 0], gs[1,1], gs[1,2], gs[2,0], gs[2,1], gs[2,2]]
-    
-    for i in range(0, len(wcs)):
-        ax = fig.add_subplot(coords[i])
-        ax.axis('off')
-        ax.imshow(wcs[i])
-     
-    return plt
-
-    
 def generate_wc(text, corpus=None, recent=None, language="en-US"):
     x, y = np.ogrid[:900, :900]
     mask = (x - 450) ** 2 + (y - 450) ** 2 > 450 ** 2
     mask = 255 * mask.astype(int)
-  
     
     freqs = get_freqDist(text, corpus, language=language)  
     
@@ -110,16 +80,10 @@ def generate_wc(text, corpus=None, recent=None, language="en-US"):
     else :
         color_func = None
     
-    font_path="./display/fonts/NotoSans-Regular.ttf"
-    if(language == "en-US"):
-      stop_words = stop_words_en
-    elif(language == "fr-FR"):
-        stop_words = stop_words_fr 
-    elif(language == "es-ES"):
-        stop_words = stop_words_es 
-    elif(language == "ar-SA"):
+    if(language == "ar-SA"):
         font_path ='./display/fonts/NotoNaskhArabic-Regular.ttf'
-        stop_words = stop_words_ar
+    else:
+        font_path="./display/fonts/NotoSans-Regular.ttf"
 
     wc = WordCloud(max_words=20,
              font_path=font_path,
@@ -132,10 +96,3 @@ def generate_wc(text, corpus=None, recent=None, language="en-US"):
              ).generate_from_frequencies(freqs)
     
     return wc
-    
-def wc_plot(wc):
-    fig = plt.figure()
-    fig.set_size_inches(18, 15)
-    plt.imshow(wc, interpolation="bilinear")
-    plt.axis("off")
-    return plt

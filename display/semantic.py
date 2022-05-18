@@ -11,11 +11,7 @@ nltk.download('wordnet')
 
 commons = importlib.import_module('display.commons')
 tokenize_text =  getattr(commons, "tokenize_text")
-stop_words_en =  getattr(commons, "stop_words_en")
-stop_words_fr =  getattr(commons, "stop_words_fr")
-stop_words_ar =  getattr(commons, "stop_words_ar")
-stop_words_es =  getattr(commons, "stop_words_es")
-
+stop_words =  getattr(commons, "stop_words")
 
 class LemmaTokenizer:
     ignore_tokens = [',', '.', ';', ':', '"', '``', "''", '`']
@@ -27,18 +23,8 @@ class LemmaTokenizer:
 
 def sentence_field(sentence, fields, documents, language="en-US"):
     tokenizer=LemmaTokenizer()
-    
-    if(language == "en-US"):
-        stop_words = stop_words_en
-    elif(language == "fr-FR"):
-        stop_words = stop_words_fr 
-    elif(language == "es-ES"):
-        stop_words = stop_words_es 
-    elif(language == "ar-SA"):
-        stop_words = stop_words_ar
-            
+                
     token_stop = tokenizer(' '.join(stop_words))
-
     
     vectorizer = TfidfVectorizer(stop_words=token_stop, 
                                   tokenizer=tokenizer)

@@ -1,6 +1,7 @@
 import importlib
 import time
 import base64
+import matplotlib.pyplot as plt
 
 wikifier = importlib.import_module('display.wikifier')
 wc = importlib.import_module('display.wc')
@@ -8,8 +9,6 @@ semantic = importlib.import_module('display.semantic')
 
 get_related =  getattr(wikifier, "get_related")
 get_semantics =  getattr(semantic, "get_semantics")
-wcs_plot =  getattr(wc, "wcs_plot")
-wc_plot = getattr(wc, "wc_plot")
 generate_wcs_semantics = getattr(wc, "generate_wcs_semantics")
 generate_wc = getattr(wc, "generate_wc")
 
@@ -41,11 +40,40 @@ class SemanticWrapper:
     def getSemanticFields(self):
         return self.semantic_fields
 
-def generate_cloud_basic(text, corpus=None, recent=None, language="en-US"):
-    return wc_plot(generate_wc(text, corpus=corpus, recent=recent, language=language))
+def wc_plot(wc, conf_id, language):
+    fig = plt.figure()
+    fig.set_size_inches(18, 15)
+    plt.imshow(wc, interpolation="bilinear")
+    plt.axis("off")
+    plt.savefig(f"./conference_{conf_id}/cloud_{languages.get(language)}.png")
+    plt.close(fig)
+
+def generate_cloud_basic(text, conf_id, corpus=None, recent=None, language="en-US"):
+    wc = generate_wc(text, corpus=corpus, recent=recent, language=language)
+    return wc_plot(wc, conf_id, language)
     
 
-def generate_cloud_semantic(text, corpus=None, recent=None, language="en-US"):
+def wcs_plot(wcs, conf_id, language, layout="radial"):
+    fig = plt.figure()
+    fig.set_size_inches(18, 15)
+    
+    coords = []
+    if(layout == "radial"):
+        gs = fig.add_gridspec(4, 4)
+        coords= [gs[1:-1, 1:-1], gs[1, 0], gs[2, 3], gs[0, 1], gs[3, 2]]
+    if(layout == "columns"):
+        gs = fig.add_gridspec(3, 3)
+        coords= [gs[0,0], gs[0, 1], gs[0, 2], gs[1, 0], gs[1,1], gs[1,2], gs[2,0], gs[2,1], gs[2,2]]
+    
+    for i in range(0, len(wcs)):
+        ax = fig.add_subplot(coords[i])
+        ax.axis('off')
+        ax.imshow(wcs[i])
+
+    plt.savefig(f"./conference_{conf_id}/cloud_{languages.get(language)}.png")
+    plt.close(fig)
+
+def generate_cloud_semantic(text, conf_id, corpus=None, recent=None, language="en-US"):
     global semantic_french
     global semantic_spanish
     global semantic_arabic
@@ -70,8 +98,8 @@ def generate_cloud_semantic(text, corpus=None, recent=None, language="en-US"):
         semantic = semantic_arabic
 
     text_split_semantics = get_semantics(text, semantic.getRelatedFields(), semantic.getRelatedDocuments(), language=language)    
-    
-    return wcs_plot(generate_wcs_semantics(text_split_semantics, corpus=semantic.getCorpus(), recent=recent, semantic_fields=semantic.getSemanticFields(), language=language), layout="radial")
+    wcs = generate_wcs_semantics(text_split_semantics, corpus=semantic.getCorpus(), recent=recent, semantic_fields=semantic.getSemanticFields(), language=language)
+    return wcs_plot(wcs, conf_id, language, layout="radial")
 
 def generate_conference_clouds(conf_id):    
     targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]   
@@ -100,11 +128,10 @@ def generate_conference_clouds(conf_id):
 
         if(full != ""):
             if(corpus != ""):
-                cloud = generate_cloud_semantic(full, corpus=corpus, recent=recent, language=target)
+                cloud = generate_cloud_semantic(full, conf_id, corpus=corpus, recent=recent, language=target)
             else:
-                cloud = generate_cloud_basic(full, corpus=corpus, recent=recent, language=target)            
-                cloud.savefig(f"./conference_{conf_id}/cloud_{languages.get(target)}.png")
-                print(f"Generated cloud {languages.get(target)}")
+                cloud = generate_cloud_basic(full, conf_id, corpus=corpus, recent=recent, language=target)            
+            print(f"Generated cloud {languages.get(target)}")
 
     time.sleep(10)
     generate_conference_clouds("1")
