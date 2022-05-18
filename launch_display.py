@@ -27,6 +27,8 @@ semantic_spanish = None
 semantic_arabic = None
 semantic_english = None
 
+PATH_FOLDER = './conferences'
+
 class SemanticWrapper:
     def __init__(self, corpus, language):
         self.r_fields, self.r_documents = get_related(corpus, language=language)
@@ -44,10 +46,15 @@ class SemanticWrapper:
         return self.semantic_fields
 
 def generate_cloud_basic(text, conf_id, corpus=None, recent=None, language="en-US"):
+    global PATH_FOLDER
+    path = f'{PATH_FOLDER}/{conf_id}'
     wc = generate_wc(text, corpus=corpus, recent=recent, language=language)
-    wc.to_file(f"./conference_{conf_id}/cloud_{languages.get(language)}.png")
+    wc.to_file(f"{path}/cloud_{languages.get(language)}.png")
 
 def wcs_save(wcs, conf_id, language, layout="radial"):
+    global PATH_FOLDER
+    path = f'{PATH_FOLDER}/{conf_id}'
+
     fig = plt.figure()
     fig.set_size_inches(18, 15)
     
@@ -64,7 +71,7 @@ def wcs_save(wcs, conf_id, language, layout="radial"):
         ax.axis('off')
         ax.imshow(wcs[i])
 
-    plt.savefig(f"./conference_{conf_id}/cloud_{languages.get(language)}.png")
+    plt.savefig(f"{path}/cloud_{languages.get(language)}.png")
     plt.close(fig)
 
 def generate_cloud_semantic(text, conf_id, corpus=None, recent=None, language="en-US"):
@@ -96,22 +103,25 @@ def generate_cloud_semantic(text, conf_id, corpus=None, recent=None, language="e
     wcs_save(wcs, conf_id, language, layout="radial")
 
 def read_files(conf_id, target):
+    global PATH_FOLDER
+    path = f'{PATH_FOLDER}/{conf_id}'
+
     try:      
-        f = open(f"./conference_{conf_id}/{languages.get(target)}_full.txt", "r", encoding="utf-8")
+        f = open(f"{path}/{languages.get(target)}_full.txt", "r", encoding="utf-8")
         full = f.read() 
         f.close() 
     except FileNotFoundError:
         full = ""
 
     try: 
-        f2 = open(f"./conference_{conf_id}/{languages.get(target)}_recent.txt", "r", encoding="utf-8")
+        f2 = open(f"{path}/{languages.get(target)}_recent.txt", "r", encoding="utf-8")
         recent = f2.read() 
         f2.close() 
     except FileNotFoundError:
         recent = ""
 
     try:
-        f = open(f"./conference_{conf_id}/corpus_{languages.get(target)}.txt", "r")
+        f = open(f"{path}/{conf_id}/corpus_{languages.get(target)}.txt", "r")
         corpus = f.read() 
         f.close() 
     except FileNotFoundError:
@@ -120,6 +130,10 @@ def read_files(conf_id, target):
     return full, recent, corpus
 
 def post_wordcloud(conf_id):
+    global PATH_FOLDER
+    path = f'{PATH_FOLDER}/{conf_id}'
+    
+    error = False
     languages = ["french", "spanish", "arabic", "english"]
     images = {
         "english":"", 
@@ -128,12 +142,16 @@ def post_wordcloud(conf_id):
         "arabic":""
     }
     for language in languages:
-        f = open(f'./conference_{conf_id}/cloud_{language}.png', 'rb')
-        encoded = base64.b64encode(f.read())
-        f.close()
-        images[language] = encoded
-    r = requests.post("https://multiling-oeg.univ-nantes.fr/updateWordCloud", data = images)
-    print(r)
+        try:
+            f = open(f'{path}/cloud_{language}.png', 'rb')
+            encoded = base64.b64encode(f.read())
+            f.close()
+            images[language] = encoded
+        except FileNotFoundError:
+            error = True
+    if(error == False):
+        r = requests.post("https://multiling-oeg.univ-nantes.fr/updateWordCloud", data = images)
+        print(r)
 
 def end_conference(conf_id): 
     lang_targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]   

@@ -24,6 +24,8 @@ RED = "\033[0;31m"
 GREEN = "\033[0;32m"
 YELLOW = "\033[0;33m"
 
+PATH_FOLDER = './conferences'
+
 def listen_print_loop(responses, stream):
     final = ""
     for response in responses:
@@ -87,10 +89,13 @@ def put_sentence(data):
 
 def record_conference(conf_id, conf_name, conf_room, conf_lang):
     
-    path = f'conference_{conf_id}'
+    global PATH_FOLDER
+    path = f'{PATH_FOLDER}/{conf_id}'
+    if (os.path.exists(PATH_FOLDER) == False):
+        os.mkdir(PATH_FOLDER)
+    path = f'{PATH_FOLDER}/{conf_id}'
     if (os.path.exists(path) == False):
         os.mkdir(path)
-    
     
     client = speech.SpeechClient()
     config = speech.RecognitionConfig(
@@ -134,7 +139,7 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
                 "spanish":"", 
                 "arabic":""
             }
-            
+
             transcription = listen_print_loop(responses, stream)
             
             texts[conf_lang] = transcription
@@ -157,19 +162,19 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
 
             for key, value in texts.items():
                 if conf_lang == "arabic":
-                    f = open(f"./conference_{conf_id}/{key}_full.txt", "ab+", encoding="utf-8")
+                    f = open(f"{path}/{key}_full.txt", "ab+", encoding="utf-8")
                     f.write("{}".format(value))
                     f.close()
 
-                    f2 = open(f"./conference_{conf_id}/{key}_recent.txt", "wb+", encoding="utf-8")
+                    f2 = open(f"{path}/{key}_recent.txt", "wb+", encoding="utf-8")
                     f2.write("{}".format(value))
                     f2.close()
                 else:
-                    f = open(f"./conference_{conf_id}/{key}_full.txt", "a+", encoding="utf-8")
+                    f = open(f"{path}/{key}_full.txt", "a+", encoding="utf-8")
                     f.write("{}".format(value))
                     f.close()
 
-                    f2 = open(f"./conference_{conf_id}/{key}_recent.txt", "w+", encoding="utf-8")
+                    f2 = open(f"{path}/{key}_recent.txt", "w+", encoding="utf-8")
                     f2.write("{}".format(value))
                     f2.close()
 
@@ -185,4 +190,4 @@ while(conf_lang not in lang_targets):
 
 print("Starting transcription")
 
-record_conference(conf_id, conf_title, "405", conf_lang)
+record_conference(conf_id, conf_title, "450", conf_lang)

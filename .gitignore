@@ -1,4 +1,4 @@
-conference_*
+conferences
 speech/*.json
 display/*.json
 *.json
