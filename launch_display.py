@@ -132,7 +132,7 @@ def read_files(conf_id, target):
 def post_wordcloud(conf_id):
     global PATH_FOLDER
     path = f'{PATH_FOLDER}/{conf_id}'
-    
+
     error = False
     languages = ["french", "spanish", "arabic", "english"]
     images = {
