@@ -227,4 +227,4 @@ def generate_conference_clouds(conf_id):
 
 conf_id = input("Conference id: ")
 print("Starting generation")
-end_conference(conf_id)
+generate_conference_clouds(conf_id)
