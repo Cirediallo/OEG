@@ -58,7 +58,7 @@ def listen_print_loop(responses, stream):
             sys.stdout.write("\033[K")
             sys.stdout.write("transcription" + sentence + "\n")
 
-            if re.search(r"\b(sortir de là|end of transcription|propaganda)\b", transcript, re.I):
+            if re.search(r"\b(fin de la transcription|end of transcription|fin de transcripcion)\b", transcript, re.I):
                 sys.stdout.write(YELLOW)
                 sys.stdout.write("Exiting...\n")
                 stream.closed = True
