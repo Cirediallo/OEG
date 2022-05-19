@@ -2,7 +2,7 @@ import time
 from six.moves import queue
 import pyaudio
 
-STREAMING_LIMIT = 20000
+STREAMING_LIMIT = 10000
 
 def get_current_time():
     """Return Current Time in MS."""
