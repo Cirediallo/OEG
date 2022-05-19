@@ -73,7 +73,7 @@ def generate_wc(text, corpus=None, recent=None, language="en-US"):
     mask = (x - 450) ** 2 + (y - 450) ** 2 > 450 ** 2
     mask = 255 * mask.astype(int)
 
-    freqs = get_freqDist(text+corpus, corpus, language=language)  
+    freqs = get_freqDist(text, corpus, language=language)  
 
     if(recent != None):
         color_func = recent_word_color_func("blue", "lightblue", recent)

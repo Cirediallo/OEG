@@ -84,7 +84,7 @@ lang_targets = list(languages.keys())
 def put_sentence(data):
     json_object = json.dumps(data, indent = 4, ensure_ascii=False).encode('utf8')
     print(json_object.decode())
-    x = requests.put("https://multiling-oeg.univ-nantes.fr/insertion", data = json_object)
+    x = requests.post("https://multiling-oeg.univ-nantes.fr/insertion", data = json_object)
     print(x)
 
 def record_conference(conf_id, conf_name, conf_room, conf_lang):
@@ -152,7 +152,7 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
                     texts[lang_target] = translation
 
             data = dict()
-            data["conf_id"] = int(conf_id)
+            data["conf_id"] = conf_id
             data["conf_name"] = conf_name
             data["conf_room"] = conf_room
             data["conf_lang"] = conf_lang
@@ -180,9 +180,8 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
 
             print(f"Memory used : {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}")
 
-conf_id = ""
-while(conf_id.isdigit() == False):
-    conf_id = input("Conference id (integer): ")
+
+conf_id = input("Conference id (integer): ")
 conf_title = input("Conference title: ")
 conf_lang=""
 while(conf_lang not in lang_targets):

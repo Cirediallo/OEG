@@ -196,12 +196,12 @@ def end_conference(conf_id):
         full, recent, corpus = read_files(conf_id, lang_target)
         if(full != ""):
             if(corpus != ""):
-                generate_cloud_basic(full, conf_id, corpus=corpus, recent=full, language=lang_target)
+                generate_cloud_basic(full, conf_id, corpus=corpus, recent=None, language=lang_target)
             else:
-                generate_cloud_basic(full, conf_id, corpus=corpus, recent=full, language=lang_target)            
+                generate_cloud_basic(full, conf_id, corpus=corpus, recent=None, language=lang_target)            
             print(f"Generated cloud {languages.get(lang_target)}")
         
-    post_wordcloud(conf_id)
+    #post_wordcloud(conf_id)
 
 def generate_conference_clouds(conf_id):    
     lang_targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]   
@@ -209,9 +209,10 @@ def generate_conference_clouds(conf_id):
         full, recent, corpus = read_files(conf_id, lang_target)
 
         if(full != "" or corpus != ""):
-            if(corpus != ""):
-                #generate_cloud_semantic(full, conf_id, corpus=corpus, recent=recent, language=lang_target)
-                generate_cloud_basic(full, conf_id, corpus=corpus, recent=recent, language=lang_target)   
+            if(full == "") :
+                generate_cloud_basic(corpus, conf_id, corpus=corpus, recent=None, language=lang_target)  
+            elif(corpus != ""):
+                generate_cloud_basic(full+corpus, conf_id, corpus=corpus, recent=recent, language=lang_target)   
             else:
                 generate_cloud_basic(full, conf_id, corpus=corpus, recent=recent, language=lang_target)            
             print(f"Generated cloud {languages.get(lang_target)}")
@@ -224,8 +225,6 @@ def generate_conference_clouds(conf_id):
     time.sleep(10)
     generate_conference_clouds(conf_id)
 
-conf_id=""
-while(conf_id.isdigit() == False):
-    conf_id = input("Conference id: ")
+conf_id = input("Conference id: ")
 print("Starting generation")
-generate_conference_clouds(conf_id)
+end_conference(conf_id)
