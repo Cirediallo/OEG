@@ -76,7 +76,7 @@ def generate_wc(text, corpus=None, recent=None, language="en-US"):
     freqs = get_freqDist(text, corpus, language=language)  
 
     if(recent != None):
-        color_func = recent_word_color_func("blue", "lightblue", recent)
+        color_func = recent_word_color_func("#188aff", "lightblue", recent)
     else :
         color_func = None
     
