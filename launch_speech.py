@@ -142,23 +142,24 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
 
             transcription = listen_print_loop(responses, stream)
             
-            texts[conf_lang] = transcription
-            for lang_target in lang_targets:
-                if(lang_target != conf_lang):
-                    if(transcription != ""):
-                        translation = translate_text(transcription, languages.get(conf_lang), languages.get(lang_target))
-                    else:
-                        translation = transcription
-                    texts[lang_target] = translation
+            if(transcription!=""):
+                texts[conf_lang] = transcription
+                for lang_target in lang_targets:
+                    if(lang_target != conf_lang):
+                        if(transcription != ""):
+                            translation = translate_text(transcription, languages.get(conf_lang), languages.get(lang_target))
+                        else:
+                            translation = transcription
+                        texts[lang_target] = translation
 
-            data = dict()
-            data["conf_id"] = conf_id
-            data["conf_name"] = conf_name
-            data["conf_room"] = conf_room
-            data["conf_lang"] = conf_lang
-            data["sentences"] = texts.copy()
-
-            put_sentence(data)
+                data = dict()
+                data["conf_id"] = conf_id
+                data["conf_name"] = conf_name
+                data["conf_room"] = conf_room
+                data["conf_lang"] = conf_lang
+                data["sentences"] = texts.copy()
+                
+                put_sentence(data)
 
             for key, value in texts.items():
                 if conf_lang == "arabic":
