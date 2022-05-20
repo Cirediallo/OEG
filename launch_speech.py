@@ -163,12 +163,20 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
 
             for key, value in texts.items():
                 if conf_lang == "arabic":
-                    f = open(f"{path}/{key}_full.txt", "ab+", encoding="utf-8")
-                    f.write("{}".format(value))
+                    f = open(f"{path}/{key}_full.txt", "ab+")
+                    if type(value) is bytes:
+                        value = value
+                    else:
+                        value = value.encode('utf8')
+                    f.write(value)
                     f.close()
 
-                    f2 = open(f"{path}/{key}_recent.txt", "wb+", encoding="utf-8")
-                    f2.write("{}".format(value))
+                    f2 = open(f"{path}/{key}_recent.txt", "wb+")
+                    if type(value) is bytes:
+                        value = value
+                    else:
+                        value = value.encode('utf8')
+                    f2.write(value)
                     f2.close()
                 else:
                     f = open(f"{path}/{key}_full.txt", "a+", encoding="utf-8")
