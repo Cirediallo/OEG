@@ -188,6 +188,7 @@ def post_wordcloud(conf_id):
         except FileNotFoundError:
             error = True
     if(error == False):
+        time.sleep(1)
         r = requests.post("https://multiling-oeg.univ-nantes.fr/updateWordCloud", data = images)
         print(r)
         return r
@@ -238,7 +239,7 @@ def generate_conference_clouds(conf_id):
     gc.collect()
     print(f"Memory used : {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}")
 
-    time.sleep(10)
+    time.sleep(5)
     generate_conference_clouds(conf_id)
 
 conf_id = input("Conference id: ")
