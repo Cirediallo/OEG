@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import resource
 import gc
 import requests
+import signal
 
 wikifier = importlib.import_module('display.wikifier')
 wc = importlib.import_module('display.wc')
@@ -189,28 +190,43 @@ def post_wordcloud(conf_id):
     if(error == False):
         r = requests.post("https://multiling-oeg.univ-nantes.fr/updateWordCloud", data = images)
         print(r)
+        return r
+    return "error"
 
 def end_conference(conf_id): 
     lang_targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]   
     for lang_target in lang_targets:
         full, recent, corpus = read_files(conf_id, lang_target)
-        if(full != ""):
-            if(corpus != ""):
-                generate_cloud_basic(full, conf_id, corpus=corpus, recent=None, language=lang_target)
+        if(full != "" or corpus != ""):
+            if(full == "") :
+                generate_cloud_basic(corpus, conf_id, corpus=corpus, recent=corpus, language=lang_target)  
+            elif(corpus != ""):
+                generate_cloud_basic(full+corpus, conf_id, corpus=corpus, recent=full+corpus, language=lang_target)
             else:
-                generate_cloud_basic(full, conf_id, corpus=corpus, recent=None, language=lang_target)            
+                generate_cloud_basic(full, conf_id, corpus=corpus, recent=full, language=lang_target)            
             print(f"Generated cloud {languages.get(lang_target)}")
-        
-    #post_wordcloud(conf_id)
+    
+    status_code = 0
+    while(status_code!=200):
+        status_code = post_wordcloud(conf_id).status_code
+        time.sleep(5)
 
-def generate_conference_clouds(conf_id):    
+ 
+def handler(signum, frame):
+    res = input("Do you really want to end conference? y/n ")
+    if res == 'y':
+        end_conference(conf_id)
+        exit(1)
+
+def generate_conference_clouds(conf_id):  
+    signal.signal(signal.SIGINT, handler)  
     lang_targets = ["ar-SA", "es-ES", "fr-FR", "en-US"]   
     for lang_target in lang_targets:
         full, recent, corpus = read_files(conf_id, lang_target)
 
         if(full != "" or corpus != ""):
             if(full == "") :
-                generate_cloud_basic(corpus, conf_id, corpus=corpus, recent=None, language=lang_target)  
+                generate_cloud_basic(corpus, conf_id, corpus=corpus, recent="", language=lang_target)  
             elif(corpus != ""):
                 generate_cloud_basic(full+corpus, conf_id, corpus=corpus, recent=recent, language=lang_target)   
             else:
@@ -227,4 +243,5 @@ def generate_conference_clouds(conf_id):
 
 conf_id = input("Conference id: ")
 print("Starting generation")
+
 generate_conference_clouds(conf_id)

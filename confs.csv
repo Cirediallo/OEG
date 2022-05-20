@@ -399,39 +399,19 @@ Lambert, S. (2019). The Siyavula case: Digital, collaborative text-book author
 Orr, D., M. Rimini and D. Van Damme (2015), Open Educational Resources: A Catalyst for Innovation, Educational Research and Innovation, OECD Publishing, Paris. http://dx.doi.org/10.1787/9789264247543-en 
 Smith, B., & Lee, L. (2016). Librarians and OER: Cultivating a community of practice to be more effective advocates. Journal of Library & Information Services in Distance Learning, 11(1-2), 106-122. https://doi.org/10.1080/1533290x.2016.1226592
 Tlili, A., Nascimbeni, F., Burgos, D., Zhang, X., Huang, R., & Chang, T. (2020). The evolution of sustainability models for open educational resources: Insights from the literature and experts. Interactive Learning Environments, 1-16. https://doi.org/10.1080/10494820.2020.1839507"
-TEST1,Class’Code : des idées qui vont devenir une réalité,Colin de la Higuera,Auditorium 450,,french,"Informatique, numérique, code... Au moment d’écrire ces lignes, l’informaticien
-voit une réelle prise de conscience de l’importance pour l’école d’entrer dans le
-XXIe siècle mais sent bien que le compte n’y est pas : ambition certes affichée, mais
-comment y arriver ? Comment se doter des enseignants formés pour l’enseignement
-de l’informatique (puisque c’est bien de cela qu’il s’agit) ?
-Si la Société informatique de France, avec d’autres, n’hésite pas à participer au
-débat public, à rencontrer des partenaires institutionnels pour convaincre des bons
-choix à effectuer, elle doit également jouer un rôle d’acteur dans la transformation
-de la société qui est aujourd’hui nécessaire.
-C’est le but que la SIF s’est fixé en participant à la mise en place du projet
-Class’Code 3. C’est le but qu’elle doit maintenant se fixer en soutenant le déploie-
-ment de ce projet. La question n’est hélas pas nouvelle : depuis bien longtemps, lorsque l’on suggère
-que l’informatique pourrait être enseignée un peu plus sérieusement, une réponse
-(souvent implicite) est « mais nous n’avons pas les enseignants pour le faire ». Et
-quand on indique qu’il serait bon d’inclure un enseignement d’informatique dans les
-cours dispensés dans la formation des enseignants, ou qu’un CAPES (ou une agréga-
-tion) en informatique pourrait être créé pour justement avoir le corps d’enseignants
-capables de faire face à ces défis du XXIe siècle, la réponse fuse immédiatement :
-« mais ce serait une erreur : il n’y a pas assez d’enseignement à pourvoir... la personne
-recrutée pour enseigner l’informatique serait très malheureuse, obligée de voyager
-continuellement de lycée en lycée pour gérer un service compliqué. »
-Ce cercle vicieux semble éternel. Mais il peut se briser en introduisant dans le
-système, progressivement, les éléments pour que ça change. D’une certaine façon, le
-ministère de l’Éducation nationale est en train d’y contribuer en introduisant des en-
-seignements d’initiation à l’informatique, à plusieurs niveaux, au collège et au lycée.
-Mais pour accélérer la fin de ce cercle vicieux il est souhaitable également d’ajouter
-des compétences informatiques aux professionnels de l’éducation qui pourront alors
-rassurer les pouvoirs publics sur l’existence d’éducateurs susceptibles de former les
-enfants et les adolescent-e-s.
-Le besoin qui est apparu récemment de façon quasi consensuelle en France est
-celui de la formation au code. Nous analyserons dans ce qui suit les raisons de l’ap-
-parition de ce besoin, et ce en quoi l’informatique est une réponse adéquate au besoin
-exprimé. Puis comment on peut espérer former les dizaines de milliers d’éducateurs,
-de formateurs, d’animateurs du périscolaire ou de l’éducation populaire, d’ensei-
-gnants qui pourront alors transmettre des connaissances en informatique aux enfants
-et aux jeunes adolescent-e-s."
+TEST_OEG,L’éducation ouverte ne sera pas monolingue,Colin de la Higuera,Auditorium 450,,french,"L’ouverture se décline de nombreuses façons, mais généralement, il s’agit de faire tomber des barrières. Dans le cas de l’éducation les barrières pour empêcher d’apprendre et d’enseigner sont nombreuses. Les coûts et les difficultés d’accès à des ressources de qualité en est une. Mais la langue en est également une. Dans certaines langues il est bien plus facile d’accéder à la connaissance. Et si on ne fait pas attention, la situation peut s’aggraver : quelqu’un qui veut partager aura nécessairement envie de partager là où le partage est le plus simple. Et donc assez logiquement dans la langue dominante, même quand ce n’est pas la sienne.
+On peut penser que la solution est de défendre une langue contre une autre. Et développer, une activité parallèle.
+Mais une alternative se pose. Peut-on ne pas choisir parmi plusieurs monolinguismes ?
+Certains pays pratiquent déjà le bilinguisme et encouragent à l’utilisation de deux langues (ou plus).
+A Open Education Global, nous avons choisi également de nous poser cette question : peut-on parler d’éducation ouverte en plusieurs langues. En même temps ? Dans un même endroit ?
+Le défi était gigantesque. Nous l’avons en parti relevé dès l’édition 2021 avec des webinaires en 5 langues. Chaque webinaire la sienne.
+Pour Open Education Global 2022 nous sommes allés plus loin : 4 langues ont été retenues. Les personnes voulant présenter leurs travaux et idées à la conférence avaient le choix de présenter leur contribution (par écrit, lors de la phase de « soumission ») en arabe, espagnol, français ou anglais. Ces contributions ont été relues et évalués dans ces mêmes langues et le programme a été élaboré autour de 90 contributions venant non seulement du monde entier, mais d’univers lingusitiques très différents.
+Jusque là, tout va bien. Mais maintenant, comment permettre aux gens de s’exprimer et se comprendre, au moins en partie ?
+Recruter des interprètes ? Hélas, nos moyens ne nous le permettaient pas. Mais nous sommes adossés à un laboratoire d’informatique, donc nous avons embauché nos étudiants et démarré une extraordinaire aventure. Objectif : livrer en quelques semaine une application permettant aux une et aux autres de suivre le fil des débats, même quand ceux-ci avaient lieu dans une langue différente.
+A première vue, l’idée consisterait « juste » à assurer une traduction automatique simultanée. Mais la technologie est justement encore un peu « juste » pour permettre cela et, de plus, l’expérience désirée n’est pas celle là. Il ne s’agit pas d’isoler encore un peu plus chacun derrière un casque ! Non, le but doit être d’offrir un outil d’accompagnement. Pas nécessairement qui nous permettre de comprendre mot à mot ce qui se dit, mais plutôt de savoir de quoi on parle.
+Les fonctionnalités de notre application MultilingOEG sont alors les suivantes :
+Permettre d’avoir accès, avec une latence très faible, à la transcription écrite de ce qui se dit ainsiq que la traduction dans les 3 autres langues
+Permettre d’émettre un avis sur ce qui se dit : pouvoir ainsi dégager les idées fortes d’un discours… qui pourront bien entendu ne pas être les mêmes en arabe qu’en anglais.
+Afficher un nuage de mots de la présentation en cours. Ou plutôt 4 nuages de mots, bien entendu.
+Et comme la conférece est diffusée en streaming, ceci sera accessible depuis la cité des congrès de Nantes, mais aussi depuis l’Afrique du Sud, le Pérou ou la Norvège, pour nommer quelques pays qui nous envoient des participants.
+Julien Aubert--Béduchaud, Mamadou Diallo, MaximeTouzé (nos étudiants, accompagnés de Victor Connes et Andréane Roques) ont déjà rempli leur mission. Celle de prouver que c’était faisable, de montrer qu’on peut gérer les questions linguistiques aujourd’hui. Les usages de ces prochains jours montreriont si nous avons raison ou non."
