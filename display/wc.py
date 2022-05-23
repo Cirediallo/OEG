@@ -37,9 +37,10 @@ def generate_wcs_semantics(splits, corpus, recent, semantic_fields, language="en
     x, y = np.ogrid[:900, :900]
     mask = (x - 450) ** 2 + (y - 450) ** 2 > 450 ** 2
     mask = 255 * mask.astype(int)
-    
+    print(language)
     if(language == "ar-SA"):
-        font_path ='./display/fonts/NotoNaskhArabic-Regular.ttf'
+        print("test")
+        font_path ='./display/fonts/ARIAL.TTF'
     else:
         font_path="./display/fonts/NotoSans-Regular.ttf"
 
@@ -81,7 +82,7 @@ def generate_wc(text, corpus=None, recent=None, language="en-US"):
         color_func = None
     
     if(language == "ar-SA"):
-        font_path ='./display/fonts/NotoNaskhArabic-Regular.ttf'
+        font_path ='./display/fonts/ARIAL.TTF'
     else:
         font_path="./display/fonts/NotoSans-Regular.ttf"
 
