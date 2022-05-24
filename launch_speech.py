@@ -12,10 +12,10 @@ import gc
 
 credential_path = "./speech/speechtotextapi.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
+API_PROJECT_ID = 'starry-will-351113'
 
 translate_text =  getattr(importlib.import_module('speech.translate'), "translate_text")
 ResumableMicrophoneStream  = getattr(importlib.import_module('speech.ResumableMicrophoneStreamClass'), 'ResumableMicrophoneStream')
-
 
 SAMPLE_RATE = 16000
 CHUNK_SIZE = int(SAMPLE_RATE / 10)  # 100ms
@@ -147,7 +147,7 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
                 for lang_target in lang_targets:
                     if(lang_target != conf_lang):
                         if(transcription != ""):
-                            translation = translate_text(transcription, languages.get(conf_lang), languages.get(lang_target))
+                            translation = translate_text(transcription, languages.get(conf_lang), languages.get(lang_target), API_PROJECT_ID)
                         else:
                             translation = transcription
                         texts[lang_target] = translation
@@ -168,7 +168,7 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
                         value = value
                     else:
                         value = value.encode('utf8')
-                    f.write(value)
+                    f.write(" " + value)
                     f.close()
 
                     f2 = open(f"{path}/{key}_recent.txt", "wb+")
@@ -176,15 +176,15 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
                         value = value
                     else:
                         value = value.encode('utf8')
-                    f2.write(value)
+                    f2.write(" " +value)
                     f2.close()
                 else:
                     f = open(f"{path}/{key}_full.txt", "a+", encoding="utf-8")
-                    f.write("{}".format(value))
+                    f.write(" {}".format(value))
                     f.close()
 
                     f2 = open(f"{path}/{key}_recent.txt", "w+", encoding="utf-8")
-                    f2.write("{}".format(value))
+                    f2.write(" {}".format(value))
                     f2.close()
 
             print(f"Memory used : {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}")

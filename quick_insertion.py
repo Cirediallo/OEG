@@ -9,8 +9,8 @@ texts = {
 }
             
 data = dict()
-data["conf_id"] = "OPENING"
-data["conf_name"] = "Opening Ceremony"
+data["conf_id"] = "J20900"
+data["conf_name"] = " Keynote 2 (Andres Arauz): Buen Conocer..."
 data["conf_room"] = "Auditorium 450"
 data["conf_lang"] = "english"
 data["sentences"] = texts.copy()

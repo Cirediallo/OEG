@@ -1,7 +1,7 @@
 import os
 from google.cloud import translate
 
-def translate_text(text, lang_source, lang_target, project_id="speechtotextapi-340414"):
+def translate_text(text, lang_source, lang_target, project_id):
 
     client = translate.TranslationServiceClient()
 
