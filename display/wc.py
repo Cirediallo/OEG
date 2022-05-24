@@ -29,7 +29,7 @@ def recent_word_color_func(color="blue", light_color="lightblue", recent=None):
 
   return SimpleGroupedColorFunc(color_to_words, light_color)
 
-
+"""
 def generate_wcs_semantics(splits, corpus, recent, semantic_fields, language="en-US"):
     colors = ["blue", "limegreen", "red", "purple", "darkorange"]
     lightcolors = ["lightblue", "lightgreen", "lightcoral", "thistle", "bisque"]
@@ -68,6 +68,7 @@ def generate_wcs_semantics(splits, corpus, recent, semantic_fields, language="en
     sorted_zipped_lists = sorted(zipped_lists)
     wcs = [element for _, element in sorted_zipped_lists]
     return wcs
+"""
 
 def generate_wc(text, corpus=None, recent=None, language="en-US"):
     x, y = np.ogrid[:900, :900]

@@ -65,7 +65,7 @@ def listen_print_loop(responses, stream):
                 stream.closed = True
                 break
 
-            final += transcript
+            final += " " + transcript
 
         else:
             sys.stdout.write(RED)
@@ -177,15 +177,15 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
                         value = value
                     else:
                         value = value.encode('utf8')
-                    f2.write(" " +value)
+                    f2.write(" " + value)
                     f2.close()
                 else:
                     f = open(f"{path}/{key}_full.txt", "a+", encoding="utf-8")
-                    f.write(" {}".format(value))
+                    f.write(" " + value)
                     f.close()
 
                     f2 = open(f"{path}/{key}_recent.txt", "w+", encoding="utf-8")
-                    f2.write(" {}".format(value))
+                    f2.write(" " + value)
                     f2.close()
 
             print(f"Memory used : {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}")

@@ -13,7 +13,7 @@ def translate_text(text, lang_source, lang_target, project_id):
     response = client.translate_text(
         parent= parent,
         contents= [text],
-        mime_type= "text/plain",  # mime types: text/plain, text/html
+        mime_type= "text/plain",
         source_language_code= lang_source,
         target_language_code= lang_target,
     )
