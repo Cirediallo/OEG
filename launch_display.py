@@ -8,12 +8,12 @@ import gc
 import requests
 import signal
 
+wc = importlib.import_module('display.wc')
+generate_wc = getattr(wc, "generate_wc")
+
 #get_related =  getattr(importlib.import_module('display.wikifier'), "get_related")
 #get_semantics =  getattr(importlib.import_module('display.semantic'), "get_semantics")
-
-wc = importlib.import_module('display.wc')
 #generate_wcs_semantics = getattr(wc, "generate_wcs_semantics")
-generate_wc = getattr(wc, "generate_wc")
 
 languages = {
     "ar-SA" : "arabic",
@@ -21,6 +21,14 @@ languages = {
     "fr-FR" : "french",
     "es-ES" : "spanish",
 }
+
+PATH_FOLDER = './conferences'
+
+def generate_cloud_basic(text, conf_id, corpus=None, recent=None, language="en-US"):
+    global PATH_FOLDER
+    path = f'{PATH_FOLDER}/{conf_id}'
+    wc = generate_wc(text, corpus=corpus, recent=recent, language=language)
+    wc.to_file(f"{path}/cloud_{languages.get(language)}.png")
 
 """
 semantic_french = None
@@ -31,11 +39,8 @@ semantic_corpus_french = None
 semantic_corpus_spanish = None
 semantic_corpus_arabic = None
 semantic_corpus_english = None
-"""
 
-PATH_FOLDER = './conferences'
 
-"""
 class SemanticWrapper:
     def __init__(self, corpus, language):
         self.r_fields, self.r_documents = get_related(corpus, language=language)
@@ -51,15 +56,7 @@ class SemanticWrapper:
         return self.r_fields
     def getSemanticFields(self):
         return self.semantic_fields
-"""
 
-def generate_cloud_basic(text, conf_id, corpus=None, recent=None, language="en-US"):
-    global PATH_FOLDER
-    path = f'{PATH_FOLDER}/{conf_id}'
-    wc = generate_wc(text, corpus=corpus, recent=recent, language=language)
-    wc.to_file(f"{path}/cloud_{languages.get(language)}.png")
-
-"""
 def wcs_save(wcs, conf_id, language, layout="radial"):
     global PATH_FOLDER
     path = f'{PATH_FOLDER}/{conf_id}'

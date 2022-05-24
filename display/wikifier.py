@@ -2,7 +2,6 @@
 import urllib.parse, urllib.request, json
 import requests
 
-
 def wikify(text, lang="auto", threshold=0.83):
   # Prepare the URL.
   data = urllib.parse.urlencode([
