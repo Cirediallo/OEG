@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import importlib
 import os
 import re
@@ -111,7 +112,7 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
 
     mic_manager = ResumableMicrophoneStream(SAMPLE_RATE, CHUNK_SIZE)
     sys.stdout.write(YELLOW)
-    sys.stdout.write('\nListening, say "Quit" or "Exit" to stop.\n\n')
+    sys.stdout.write('\nListening, Ctrl+C to stop.\n\n')
     sys.stdout.write("End (ms)       Transcript Results/Status\n")
     sys.stdout.write("=====================================================\n")
 
@@ -190,7 +191,7 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
             print(f"Memory used : {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}")
 
 
-conf_id = input("Conference id (integer): ")
+conf_id = input("Conference id: ")
 conf_title = input("Conference title: ")
 conf_lang=""
 while(conf_lang not in lang_targets):

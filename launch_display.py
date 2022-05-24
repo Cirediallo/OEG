@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import importlib
 import time
 import base64
@@ -7,12 +8,10 @@ import gc
 import requests
 import signal
 
-wikifier = importlib.import_module('display.wikifier')
-wc = importlib.import_module('display.wc')
-semantic = importlib.import_module('display.semantic')
+get_related =  getattr(importlib.import_module('display.wikifier'), "get_related")
+get_semantics =  getattr(importlib.import_module('display.semantic'), "get_semantics")
 
-get_related =  getattr(wikifier, "get_related")
-get_semantics =  getattr(semantic, "get_semantics")
+wc = importlib.import_module('display.wc')
 generate_wcs_semantics = getattr(wc, "generate_wcs_semantics")
 generate_wc = getattr(wc, "generate_wc")
 
@@ -27,8 +26,6 @@ semantic_french = None
 semantic_spanish = None
 semantic_arabic = None
 semantic_english = None
-
-
 semantic_corpus_french = None
 semantic_corpus_spanish = None
 semantic_corpus_arabic = None

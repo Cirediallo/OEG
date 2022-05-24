@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Experimental semantic-based clouds
+Not meant to be used on production, huge memory leak issues/long loading times
+"""
+
 import importlib
 
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -19,7 +25,6 @@ class LemmaTokenizer:
         self.wnl = WordNetLemmatizer()
     def __call__(self, doc):
         return [self.wnl.lemmatize(t) for t in word_tokenize(doc) if t not in self.ignore_tokens]
-
 
 def sentence_field(sentence, fields, documents, language="en-US"):
     tokenizer=LemmaTokenizer()
