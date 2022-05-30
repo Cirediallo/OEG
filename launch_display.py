@@ -107,7 +107,7 @@ def end_conference(conf_id):
         time.sleep(5)
 
 
-
+""" Ctrl-C Signal handler """
 def handler(signum, frame):
     res = input("Do you really want to end conference? y/n ")
     if res == 'y':
