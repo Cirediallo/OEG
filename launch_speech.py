@@ -3,45 +3,58 @@ import importlib
 import os
 import re
 import sys
-from google.cloud import speech
 
 import requests
 import json
 
+# Measure system ressource utilized by the program
 import resource
+
 import gc
 
-credential_path = "./speech/speechtotextapi.json"
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
-API_PROJECT_ID = 'starry-will-351113'
+from google.cloud import speech
+
+"""
+/* ==================== PROVIDE ==================== */
+1. The credential path by defining the variable credential_path and affect it to the path of the credential
+2. Point the environment variable "GOOGLE_APPLICATION_CREDENTIALS" to the credential
+<code>
+    os.environ[GOOGLE_APPLICATION_CREDENTIALS] = credential_path
+</code>
+3. Define the Project ID for translation as: 
+PROJECT_ID = 'here_the_translation_project_id_from_gcp'
+"""
 
 translate_text =  getattr(importlib.import_module('speech.translate'), "translate_text")
 ResumableMicrophoneStream  = getattr(importlib.import_module('speech.ResumableMicrophoneStreamClass'), 'ResumableMicrophoneStream')
 
+# Audio recording parameters
 SAMPLE_RATE = 16000
 CHUNK_SIZE = int(SAMPLE_RATE / 10)  # 100ms
 
+"""
+Terminal color code 
+"""
 RED = "\033[0;31m"
 GREEN = "\033[0;32m"
 YELLOW = "\033[0;33m"
 
 PATH_FOLDER = './conferences'
 
+"""
+Iterates through server responses.
+Get a sentence concatenation with word whose confidence level is above 70%
+
+"""
 def listen_print_loop(responses, stream):
     final = ""
     for response in responses:
         sentence = ""
         if not response.results:
             continue
-        else:
-            """
-            print("------------------QUE CACHE RESPONSE ---------------------")
-            print(response)
-            #sentence = response.
-            print("----------------- FIN RESPONSE --------------------------")
-            print("================= PRINTING RESPONSE RESULTS ===============")
-            print(response.results[0])
-            """
+            
+
+        # Get a word when its stability is above 70% and add it to the current sentence
         if response.results[0].stability >= 0.70:
             sentence += " "+response.results[0].alternatives[0].transcript
 
@@ -74,6 +87,7 @@ def listen_print_loop(responses, stream):
 
     return final            
 
+# Languages
 languages = {
     "arabic" : "ar-SA",
     "english" : "en-US",
@@ -82,12 +96,20 @@ languages = {
 }
 lang_targets = list(languages.keys())
 
+"""
+Send sentence to the website API route for database insertion
+"""
 def put_sentence(data):
     json_object = json.dumps(data, indent = 4, ensure_ascii=False).encode('utf8')
     print(json_object.decode())
     x = requests.post("https://multiling-oeg.univ-nantes.fr/insertion", data = json_object)
     print(x)
 
+"""
+Start bidirectional streaming from microphone input to Google Speech API and translate the sentence through the Translation API.
+Write the transcription text and translation in each language file
+Define current talk information
+"""
 def record_conference(conf_id, conf_name, conf_room, conf_lang):
     
     global PATH_FOLDER
@@ -148,7 +170,7 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
                 for lang_target in lang_targets:
                     if(lang_target != conf_lang):
                         if(transcription != ""):
-                            translation = translate_text(transcription, languages.get(conf_lang), languages.get(lang_target), API_PROJECT_ID)
+                            translation = translate_text(transcription, languages.get(conf_lang), languages.get(lang_target), PROJECT_ID)
                         else:
                             translation = transcription
                         texts[lang_target] = translation
@@ -191,12 +213,16 @@ def record_conference(conf_id, conf_name, conf_room, conf_lang):
             print(f"Memory used : {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}")
 
 
-conf_id = input("Conference id: ")
-conf_title = input("Conference title: ")
-conf_lang=""
-while(conf_lang not in lang_targets):
-    conf_lang = input("Conference language (arabic|english|french|spanish): ")
+def main():
+    conf_id = input("Conference id: ")
+    conf_title = input("Conference title: ")
+    conf_lang=""
+    while(conf_lang not in lang_targets):
+        conf_lang = input("Conference language (arabic|english|french|spanish): ")
 
-print("Starting transcription")
+    print("Starting transcription")
 
-record_conference(conf_id, conf_title, "450", conf_lang)
+    record_conference(conf_id, conf_title, "450", conf_lang)
+
+if __name__== "__main__":
+    main()

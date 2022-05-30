@@ -15,8 +15,9 @@ def duration_to_secs(duration):
     return duration.seconds + (duration.nanos /float(1e9))
 
 
+""" Opens a recording stream as a generator yielding the audio chuncks."""
 class ResumableMicrophoneStream:
-    """Opens a recording stream as a generator yielding the audio chunks."""
+
 
     def __init__(self, rate, chunk_size):
         
@@ -27,18 +28,18 @@ class ResumableMicrophoneStream:
         self.closed = True
         self.start_time = get_current_time()
     
-        # add: 2 bytes in 16 bits samples
+        
         self._bytes_per_sample = 2 * self._num_channels
         self._bytes_per_second = self._rate * self._bytes_per_sample
 
         self._bytes_per_chunk = (self.chunk_size * self._bytes_per_sample)
         self._chunks_per_second = (self._bytes_per_second // self._bytes_per_chunk)
-        # end add
+        
     
     def __enter__(self):
 
         self.closed = False
-        #add 
+        
         self._audio_interface = pyaudio.PyAudio()
         self._audio_stream = self._audio_interface.open(
             format=pyaudio.paInt16,
@@ -51,7 +52,7 @@ class ResumableMicrophoneStream:
             # overflow while the calling thread makes network requests, etc.
             stream_callback=self._fill_buffer,
         )
-        #end add
+        
         return self
 
     def __exit__(self, type, value, traceback):
@@ -88,7 +89,7 @@ class ResumableMicrophoneStream:
             if chunk is None:
                 return
 
-            #add
+            
             data = []
             data.append(chunk)
 
@@ -101,7 +102,7 @@ class ResumableMicrophoneStream:
                         return
                     
                     data.append(chunk)
-                    #self.audio_input.append(chunk)
+                    
 
                 except queue.Empty:
                     break
