@@ -2,7 +2,10 @@
 import os
 from google.cloud import translate
 
-""" Translating Text. """
+"""
+Translating Text. 
+return the translation
+"""
 def translate_text(text, lang_source, lang_target, project_id):
 
     client = translate.TranslationServiceClient()
