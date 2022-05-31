@@ -30,9 +30,9 @@ For installation:
     > Prerequesites: Python >= 3.7    
     *** For installation use: ***     
     * Unix:    
-        `./run.sh`   
+        `./setup.sh`   
     * Windows:    
-        `./run.psl`    
+        `./setup.psl`    
     *** For Usage, run: ***   
     * Unix:   
         `./run.sh`   
