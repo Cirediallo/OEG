@@ -18,13 +18,29 @@ The Word Cloud generation use the library wordcloud
 ### Installation and Usage:  
 This project can be used adaptively, you can use the word cloud generation part on its own, or you can use the transcription part on its ownn, or the translation part on its own or you can use them all together with another website by providing the website API routes where it's required.  
 For sake of simplicity, you can use the website deployed with the application.  
-For full installation install the requirement file using pip:   
-`pip3 install -r requirements.txt`
-For usage, in differents consoles run launch_speech.py and lauch_display.py
-`python3 lauch_speech.py`
-`python3 lauch_display.py`
-Fill the information asked for current talk and here you go
+For installation:  
+* ###### Transcription, Translation and wordcloud
+    * install the requirement file using pip:   
+        `pip3 install -r requirements.txt`  
+    * For usage, in differents consoles run launch_speech.py and lauch_display.py
+        `python3 lauch_speech.py`
+        `python3 lauch_display.py`
+    * Fill the information asked for current talk and here you go
+* ###### Website 
+    > Prerequesites: Python >= 3.7 
+    *** For installation use: ***  
+    * Unix:  
+        `./run.sh`
+    * Windows: 
+        `./run.psl`
+    *** For Usage, run: ***
+    * Unix: 
+        `./run.sh`
+    * Windows: 
+        `./run.psl`
+    * Fill the information asked for current talk and here you go again  
 
+    
 ### Licences: 
 This project is [CC BY](https://creativecommons.org/licenses/by/4.0/)  
 
