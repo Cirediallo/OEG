@@ -4,7 +4,7 @@ from google.cloud import translate
 
 """
 Translating Text. 
-return the translation
+return the translated text
 """
 def translate_text(text, lang_source, lang_target, project_id):
 
