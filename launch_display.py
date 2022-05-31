@@ -56,7 +56,8 @@ def read_files(conf_id, target):
     return full, recent, corpus
 
 """
-Send wordcloud images to the website API throught a post HTTP request and return error if an error occurred
+Send wordcloud images to the website API throught a post HTTP request.
+Return error if an error occurred
 """
 def post_wordcloud(conf_id):
     global PATH_FOLDER
