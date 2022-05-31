@@ -21,24 +21,24 @@ For sake of simplicity, you can use the website deployed with the application.
 For installation:  
 * ###### Transcription, Translation and wordcloud
     * install the requirement file using pip:   
-        `pip3 install -r requirements.txt`  
-    * For usage, in differents consoles run launch_speech.py and lauch_display.py
-        `python3 lauch_speech.py`
-        `python3 lauch_display.py`
-    * Fill the information asked for current talk and here you go
-* ###### Website 
-    > Prerequesites: Python >= 3.7 
-    *** For installation use: ***  
-    * Unix:  
-        `./run.sh`
-    * Windows: 
-        `./run.psl`
-    *** For Usage, run: ***
-    * Unix: 
-        `./run.sh`
-    * Windows: 
-        `./run.psl`
-    * Fill the information asked for current talk and here you go again  
+        `pip3 install -r requirements.txt`   
+    * For usage, in differents consoles run launch_speech.py and lauch_display.py  
+        `python3 lauch_speech.py`  
+        `python3 lauch_display.py`  
+    * Fill the information asked for current talk and here you go  
+* ###### Website   
+    > Prerequesites: Python >= 3.7    
+    *** For installation use: ***     
+    * Unix:    
+        `./run.sh`   
+    * Windows:    
+        `./run.psl`    
+    *** For Usage, run: ***   
+    * Unix:   
+        `./run.sh`   
+    * Windows:    
+        `./run.psl`    
+    * Fill the information asked for current talk and here you go again    
 
     
 ### Licences: 
