@@ -37,9 +37,7 @@ For installation:
     * Unix:   
         `./run.sh`   
     * Windows:    
-        `./run.psl`    
-    * Fill the information asked for current talk and here you go again    
-
+        `./run.psl`        
     
 ### Licences: 
 This project is [CC BY](https://creativecommons.org/licenses/by/4.0/)  
