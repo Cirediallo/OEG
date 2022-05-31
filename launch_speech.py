@@ -72,6 +72,8 @@ def listen_print_loop(responses, stream):
             sys.stdout.write("\033[K")
             sys.stdout.write("transcription" + sentence + "\n")
 
+            
+            # Output of the transcription if one of the sentences matches one of the following keywords
             if re.search(r"\b(fin de la transcription|end of transcription|fin de transcripcion)\b", transcript, re.I):
                 sys.stdout.write(YELLOW)
                 sys.stdout.write("Exiting...\n")
