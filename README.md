@@ -2,7 +2,7 @@
 ### Description  
 This projet is a multilingual project deployed at the [Open Education Global 2022 Conference](https://www.oeglobal.org/) in Nantes. The goal is to break language barrier and allow a congres to be multilingual.   
 The language taken into account this year is: *Arabic*, *English*, *French*, *Spanish*  
-The [application](multiling-oeg.univ-nantes.fr) transcribe a voice streaming input of the current talk, translate the transcription and generate a word cloud based first on the abstract of the current talk and then on the transcribed and the translated text for each language supported.  
+The [application](https://multiling-oeg.univ-nantes.fr/) transcribe a voice streaming input of the current talk, translate the transcription and generate a word cloud based first on the abstract of the current talk and then on the transcribed and the translated text for each language supported.  
 WordCloud generated, transcription and translation is send to the website API developped through a dictionnary which is stored in a Database.  
 ### Repository organisation: 
 This repository have three branchs
