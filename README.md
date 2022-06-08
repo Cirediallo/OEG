@@ -13,7 +13,8 @@ This repository have three branchs
 The website have been developped using the micro Python frameword [Flask](https://flask.palletsprojects.com/en/2.1.x/)  
 The transcription and translation use google cloud APIs [Speech-to-Text](https://cloud.google.com/speech-to-text/docs/before-you-begin) and [Translate](https://cloud.google.com/translate/docs/setup?hl=fr) respectively  
 The Word Cloud generation use the library wordcloud  
-#### Challenges: (:thinking:)
+#### Requirement: 
+python >= 3.7
 
 ### Installation and Usage:  
 This project can be used adaptively, you can use the word cloud generation part on its own, or you can use the transcription part on its ownn, or the translation part on its own or you can use them all together with another website by providing the website API routes where it's required.  
@@ -26,8 +27,7 @@ For installation:
         `python3 lauch_speech.py`  
         `python3 lauch_display.py`  
     * Fill the information asked for current talk and here you go  
-* ###### Website   
-    > Prerequesites: Python >= 3.7    
+* ###### Website        
     *** For installation use: ***     
     * Unix:    
         `./setup.sh`   
